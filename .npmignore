@@ -1,0 +1,9 @@
+src/
+test-fixtures/
+*.mmd
+tsconfig.json
+.git/
+.gitignore
+*.ts
+!dist/**/*.js
+!dist/**/*.d.ts
