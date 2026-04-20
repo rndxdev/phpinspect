@@ -9,6 +9,7 @@ import { computeMetrics } from "./analyzer/metrics.js";
 import { generateMermaidUml } from "./uml/mermaid.js";
 import { printReport } from "./reporters/terminal.js";
 import { writeJsonReport } from "./reporters/json.js";
+import { writeHtmlReport } from "./reporters/html.js";
 import type { AnalysisReport } from "./types.js";
 
 function main(): void {
@@ -94,6 +95,14 @@ function main(): void {
     console.log(`JSON report written to: ${path.resolve(jsonPath)}`);
   }
 
+  // Output HTML report if requested
+  if (flags.has("--html")) {
+    const htmlIndex = args.indexOf("--html");
+    const htmlPath = args[htmlIndex + 1] || "phpinspect-report.html";
+    writeHtmlReport(report, path.resolve(htmlPath));
+    console.log(`HTML report written to: ${path.resolve(htmlPath)}`);
+  }
+
   // Always print terminal report unless --quiet
   if (!flags.has("--quiet") && !flags.has("-q")) {
     printReport(report);
@@ -133,6 +142,7 @@ function printUsage(): void {
 
   Options:
     --uml [file]     Output Mermaid UML diagram to file (default: phpinspect-uml.mmd)
+    --html [file]    Output self-contained HTML report (default: phpinspect-report.html)
     --json [file]    Output JSON report to file (default: phpinspect-report.json)
     --laravel        Force Laravel-specific analysis (auto-detected if artisan exists)
     --strict         Exit with code 1 if errors are found
